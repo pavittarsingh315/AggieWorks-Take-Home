@@ -3,8 +3,19 @@ import "../styles/Navbar.css";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
 import NightsStayRoundedIcon from "@mui/icons-material/NightsStayRounded";
 import SearchBar from "./Searchbar";
+import PersonInterface from "../interfaces/person";
 
-function Navbar({ isDarkModeEnabled, toggleTheme }: { isDarkModeEnabled: boolean; toggleTheme: () => void }) {
+function Navbar({
+   isDarkModeEnabled,
+   toggleTheme,
+   addNewResults,
+   setIsSearching,
+}: {
+   isDarkModeEnabled: boolean;
+   toggleTheme: () => void;
+   addNewResults: (newResults: PersonInterface[]) => void;
+   setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
    var headerStyle = {
       boxShadow: "0px 6px 10px -9px rgba(111, 111, 111, 1)",
       zIndex: "1000",
@@ -21,7 +32,11 @@ function Navbar({ isDarkModeEnabled, toggleTheme }: { isDarkModeEnabled: boolean
                   <h1 style={{ color: !isDarkModeEnabled ? "#000000" : "#FFFFFF" }}>AggieWorks</h1>
                </div>
                <div className="navbar__center">
-                  <SearchBar isDarkModeEnabled={isDarkModeEnabled} />
+                  <SearchBar
+                     isDarkModeEnabled={isDarkModeEnabled}
+                     addNewResults={addNewResults}
+                     setIsSearching={setIsSearching}
+                  />
                </div>
                <div className="navbar__right">
                   <Tooltip

@@ -3,19 +3,31 @@ import React, { useState, useEffect, useRef } from "react";
 import "../styles/Searchbar.css";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
+import PersonInterface from "../interfaces/person";
 
 // https://randomuser.me/api/?page=1&results=10
 
-function SearchBar({ isDarkModeEnabled }: { isDarkModeEnabled: boolean }) {
+function SearchBar({
+   isDarkModeEnabled,
+   addNewResults,
+   setIsSearching,
+}: {
+   isDarkModeEnabled: boolean;
+   addNewResults: (newResults: PersonInterface[]) => void;
+   setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
    const [search, setSearch] = useState("");
    const [isTyping, setIsTyping] = useState(true);
 
    useEffect(() => {
       const delayDebounceFn = setTimeout(() => {
          if (search != "") {
-            // Make API call
+            setIsSearching(true);
+            // Make API call, parse data into PersonInterface[], call addNewResults
+         } else {
+            setIsSearching(false);
          }
-      }, 500);
+      }, 250);
 
       return () => clearTimeout(delayDebounceFn);
    }, [search]);
@@ -23,6 +35,7 @@ function SearchBar({ isDarkModeEnabled }: { isDarkModeEnabled: boolean }) {
    const resetState = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
       setSearch("");
       setIsTyping(false);
+      setIsSearching(false);
    };
 
    return (
