@@ -30,11 +30,6 @@ body {
    font-family: "Quicksand", sans-serif;
    -webkit-font-smoothing: antialiased;
    -moz-osx-font-smoothing: grayscale;
-
-   /* color combo variables */
-   --primary-color: #0070f3;
-   --secondary-color: #bfbfbf;
-   --third-color: #e8e8e8;
 }
 
 a {
