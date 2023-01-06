@@ -6,7 +6,7 @@ import SearchBar from "./Searchbar";
 
 function Navbar({ isDarkModeEnabled, toggleTheme }: { isDarkModeEnabled: boolean; toggleTheme: () => void }) {
    var headerStyle = {
-      boxShadow: "0px 6px 10px -9px rgba(128, 128, 128, 1)",
+      boxShadow: "0px 6px 10px -9px rgba(111, 111, 111, 1)",
       zIndex: "1000",
       top: "0",
       width: "100%",
@@ -20,8 +20,8 @@ function Navbar({ isDarkModeEnabled, toggleTheme }: { isDarkModeEnabled: boolean
                <div className="navbar__left">
                   <h1 style={{ color: !isDarkModeEnabled ? "#000000" : "#FFFFFF" }}>AggieWorks</h1>
                </div>
-               <div className="navbar__center" style={{ backgroundColor: "red" }}>
-                  <SearchBar />
+               <div className="navbar__center">
+                  <SearchBar isDarkModeEnabled={isDarkModeEnabled} />
                </div>
                <div className="navbar__right">
                   <Tooltip
@@ -30,7 +30,7 @@ function Navbar({ isDarkModeEnabled, toggleTheme }: { isDarkModeEnabled: boolean
                      enterDelay={0}
                      leaveDelay={25}
                   >
-                     <IconButton color="inherit" onClick={toggleTheme}>
+                     <IconButton disableRipple color="inherit" onClick={toggleTheme}>
                         {isDarkModeEnabled ? (
                            <LightModeRoundedIcon style={{ color: "white" }} />
                         ) : (

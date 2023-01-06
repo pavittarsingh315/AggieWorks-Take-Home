@@ -19,13 +19,8 @@
 
 .navbar__center {
    display: flex;
-   /* margin-top: 250px; */
    align-items: center;
    justify-content: center;
-   position: fixed;
-   /* top: 0; */
-   left: 50%;
-   right: 50%;
 }
 
 .navbar__right {
