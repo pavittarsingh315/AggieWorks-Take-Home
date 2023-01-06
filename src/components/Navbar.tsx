@@ -16,16 +16,17 @@ function Navbar({
    addNewResults: (newResults: PersonInterface[]) => void;
    setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-   var headerStyle = {
-      boxShadow: "0px 6px 10px -9px rgba(111, 111, 111, 1)",
-      zIndex: "1000",
-      top: "0",
-      width: "100%",
-      background: isDarkModeEnabled ? "#000000" : "#FFFFFF",
-   };
-
    return (
-      <div style={headerStyle}>
+      <div
+         style={{
+            position: "fixed",
+            boxShadow: "0px 6px 10px -9px rgba(111, 111, 111, 1)",
+            zIndex: "1000",
+            top: "0",
+            width: "100%",
+            background: isDarkModeEnabled ? "#000000" : "#FFFFFF",
+         }}
+      >
          <Container>
             <div className="navbar" style={{ backgroundColor: isDarkModeEnabled ? "#000000" : "#FFFFFF" }}>
                <div className="navbar__left">

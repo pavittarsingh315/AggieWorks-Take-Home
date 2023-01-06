@@ -4,6 +4,7 @@ import "../styles/Searchbar.css";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
 import PersonInterface from "../interfaces/person";
+import axios from "axios";
 
 // https://randomuser.me/api/?page=1&results=10
 
@@ -17,14 +18,58 @@ function SearchBar({
    setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
    const [search, setSearch] = useState("");
-   const [isTyping, setIsTyping] = useState(true);
+   const [pageNumber, setPageNumber] = useState(1);
 
    useEffect(() => {
       const delayDebounceFn = setTimeout(() => {
          if (search != "") {
             setIsSearching(true);
-            // Make API call, parse data into PersonInterface[], call addNewResults
+            axios
+               .get("https://randomuser.me/api/", {
+                  params: {
+                     page: pageNumber,
+                     results: 10,
+                     name: search,
+                  },
+               })
+               .then((res) => {
+                  setPageNumber(pageNumber + 1);
+                  var newResults: PersonInterface[] = [];
+                  res.data.results.map((result: any) => {
+                     newResults.push({
+                        age: result.dob.age,
+                        avatar: result.picture.large,
+                        city: result.location.city,
+                        country: result.location.country,
+                        email: result.email,
+                        first_name: result.name.first,
+                        last_name: result.name.last,
+                        gender: result.gender,
+                        username: result.login.username,
+                        state: result.location.state,
+                     });
+                  });
+                  addNewResults(newResults);
+               })
+               .catch((e) => {
+                  console.log(e);
+               });
          } else {
+            setPageNumber(1);
+            addNewResults([
+               {
+                  first_name: "reset",
+                  last_name: "it",
+                  age: "",
+                  avatar: "",
+                  city: "",
+                  country: "",
+                  email: "",
+                  gender: "",
+                  username: "",
+                  state: "",
+               },
+            ]);
             setIsSearching(false);
          }
       }, 250);
@@ -34,7 +79,21 @@ function SearchBar({
 
    const resetState = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
       setSearch("");
-      setIsTyping(false);
+      setPageNumber(1);
+      addNewResults([
+         {
+            first_name: "reset",
+            last_name: "it",
+            age: "",
+            avatar: "",
+            city: "",
+            country: "",
+            email: "",
+            gender: "",
+            username: "",
+            state: "",
+         },
+      ]);
       setIsSearching(false);
    };
 
