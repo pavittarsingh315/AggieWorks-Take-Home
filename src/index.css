@@ -4,24 +4,8 @@
    margin: 0;
 }
 
-/* width */
 ::-webkit-scrollbar {
-   width: 8px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-   background: #f4f4f4;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-   background: #c1c1c1;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-   background: #c1c1c1;
+   display: none;
 }
 
 body {
@@ -29,8 +13,6 @@ body {
    font-family: "Quicksand", sans-serif;
    -webkit-font-smoothing: antialiased;
    -moz-osx-font-smoothing: grayscale;
-
-   overflow-y: scroll; /* Show vertical scrollbar */
 }
 
 a {

@@ -12,10 +12,12 @@ function SearchBar({
    isDarkModeEnabled,
    addNewResults,
    setIsSearching,
+   makeAPICall,
 }: {
    isDarkModeEnabled: boolean;
    addNewResults: (newResults: PersonInterface[]) => void;
    setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
+   makeAPICall: number;
 }) {
    const [search, setSearch] = useState("");
    const [pageNumber, setPageNumber] = useState(1);
@@ -28,8 +30,8 @@ function SearchBar({
                .get("https://randomuser.me/api/", {
                   params: {
                      page: pageNumber,
-                     results: 10,
-                     name: search,
+                     results: 30,
+                     username: search,
                   },
                })
                .then((res) => {
@@ -76,6 +78,40 @@ function SearchBar({
 
       return () => clearTimeout(delayDebounceFn);
    }, [search]);
+
+   // infinite scroll
+   useEffect(() => {
+      axios
+         .get("https://randomuser.me/api/", {
+            params: {
+               page: pageNumber,
+               results: 30,
+               username: search,
+            },
+         })
+         .then((res) => {
+            setPageNumber(pageNumber + 1);
+            var newResults: PersonInterface[] = [];
+            res.data.results.map((result: any) => {
+               newResults.push({
+                  age: result.dob.age,
+                  avatar: result.picture.large,
+                  city: result.location.city,
+                  country: result.location.country,
+                  email: result.email,
+                  first_name: result.name.first,
+                  last_name: result.name.last,
+                  gender: result.gender,
+                  username: result.login.username,
+                  state: result.location.state,
+               });
+            });
+            addNewResults(newResults);
+         })
+         .catch((e) => {
+            console.log(e);
+         });
+   }, [makeAPICall]);
 
    const resetState = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
       setSearch("");

@@ -4,18 +4,33 @@ import PersonInterface from "./interfaces/person";
 
 import { Container, Button, List, ListItem, Divider, Avatar, Stack } from "@mui/material";
 import ClearRoundedIcon from "@mui/icons-material/ClearRounded";
+import DetailView from "./components/DetailView";
 
 function App() {
    const [isDarkModeEnabled, setIsDarkModeEnabled] = useState(false);
    const [isSearching, setIsSearching] = useState(false);
+   const [isModalOpen, setIsModalOpen] = useState(false);
+   const [detailPerson, setDetailPerson] = useState<PersonInterface>();
    const [recentSearches, setRecentSearches] = useState<PersonInterface[]>([]);
    const [results, setResults] = useState<PersonInterface[]>([]);
+   const [makeAPICall, setMakeAPICall] = useState(0);
 
    useEffect(() => {
       const savedThemeIsDark = JSON.parse(localStorage.getItem("isDarkModeEnabled") || "false") === "true";
+      const searchHistory: PersonInterface[] = JSON.parse(localStorage.getItem("searchHistory") || "");
+      setRecentSearches(searchHistory);
       setIsDarkModeEnabled(savedThemeIsDark);
       document.body.style.backgroundColor = savedThemeIsDark ? "black" : "white";
    }, []);
+
+   window.onscroll = () => {
+      if (
+         document.documentElement.scrollHeight - document.documentElement.scrollTop - 400 <=
+         document.documentElement.clientHeight
+      ) {
+         setMakeAPICall(makeAPICall + 1);
+      }
+   };
 
    const toggleTheme = () => {
       localStorage.setItem("isDarkModeEnabled", JSON.stringify(!isDarkModeEnabled ? "true" : "false"));
@@ -34,6 +49,7 @@ function App() {
 
    const addNewRecentSearch = (newSearch: PersonInterface) => {
       setRecentSearches([newSearch, ...recentSearches]);
+      localStorage.setItem("searchHistory", JSON.stringify([newSearch, ...recentSearches]));
    };
 
    return (
@@ -43,6 +59,7 @@ function App() {
             toggleTheme={toggleTheme}
             addNewResults={addNewResults}
             setIsSearching={setIsSearching}
+            makeAPICall={makeAPICall}
          />
          ;
          <Container style={{ marginTop: "60px" }}>
@@ -65,6 +82,7 @@ function App() {
                            size="small"
                            onClick={(e) => {
                               setRecentSearches([]);
+                              localStorage.setItem("searchHistory", JSON.stringify([]));
                            }}
                         >
                            Clear
@@ -92,6 +110,8 @@ function App() {
                                        var history = recentSearches;
                                        var removedObj = history.splice(index, 1);
                                        setRecentSearches([removedObj[0], ...history]);
+                                       setDetailPerson(recentSearch);
+                                       setIsModalOpen(true);
                                     }}
                                  >
                                     <Avatar src={recentSearch.avatar} sx={{ width: 56, height: 56 }} />
@@ -112,6 +132,7 @@ function App() {
                                        var history = recentSearches;
                                        history.splice(index, 1);
                                        setRecentSearches([...history]);
+                                       localStorage.setItem("searchHistory", JSON.stringify([...history]));
                                     }}
                                     style={{ color: isDarkModeEnabled ? "white" : "black" }}
                                  />
@@ -137,7 +158,11 @@ function App() {
                         <>
                            <ListItem
                               key={index}
-                              onClick={(e) => addNewRecentSearch(result)}
+                              onClick={(e) => {
+                                 addNewRecentSearch(result);
+                                 setDetailPerson(result);
+                                 setIsModalOpen(true);
+                              }}
                               style={{ cursor: "pointer" }}
                            >
                               <Stack direction="row" alignItems="center" spacing={2}>
@@ -161,6 +186,12 @@ function App() {
                   </List>
                </div>
             )}
+            <DetailView
+               open={isModalOpen}
+               handleClose={() => setIsModalOpen(false)}
+               person={detailPerson}
+               isDarkModeEnabled={isDarkModeEnabled}
+            />
          </Container>
       </React.Fragment>
    );

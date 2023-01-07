@@ -10,11 +10,13 @@ function Navbar({
    toggleTheme,
    addNewResults,
    setIsSearching,
+   makeAPICall,
 }: {
    isDarkModeEnabled: boolean;
    toggleTheme: () => void;
    addNewResults: (newResults: PersonInterface[]) => void;
    setIsSearching: React.Dispatch<React.SetStateAction<boolean>>;
+   makeAPICall: number;
 }) {
    return (
       <div
@@ -37,6 +39,7 @@ function Navbar({
                      isDarkModeEnabled={isDarkModeEnabled}
                      addNewResults={addNewResults}
                      setIsSearching={setIsSearching}
+                     makeAPICall={makeAPICall}
                   />
                </div>
                <div className="navbar__right">
