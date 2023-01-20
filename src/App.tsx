@@ -17,8 +17,8 @@ function App() {
 
    useEffect(() => {
       const savedThemeIsDark = JSON.parse(localStorage.getItem("isDarkModeEnabled") || "false") === "true";
-      const searchHistory: PersonInterface[] = JSON.parse(localStorage.getItem("searchHistory") || "");
-      setRecentSearches(searchHistory);
+      const searchHistory: PersonInterface[] = JSON.parse(localStorage.getItem("searchHistory") || "{}");
+      setRecentSearches(searchHistory.length ? searchHistory : []);
       setIsDarkModeEnabled(savedThemeIsDark);
       document.body.style.backgroundColor = savedThemeIsDark ? "black" : "white";
    }, []);
